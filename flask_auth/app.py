@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from models.user import User
 from database import db
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+import bcrypt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -35,7 +36,7 @@ def logout():
     logout_user()
     return jsonify({'message': 'Logged out successfully!'})
 
-@app.route('/user', methods=['POST'])
+@app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
     family_name = data.get('family_name')
@@ -52,13 +53,19 @@ def create_user():
     else:
         return jsonify({'message': 'Username and password are required!'}), 400
 
-@app.route('/user/<int:id_user>', methods=['GET'])
+@app.route('/users', methods=['GET'])
+# @login_required
+def get_users():
+    users = User.query.all()
+    return jsonify([user.to_dict() for user in users])
+
+@app.route('/users/<int:id_user>', methods=['GET'])
 @login_required
 def get_user(id_user):
     user = User.query.get_or_404(id_user)
     return jsonify(user.to_dict())
 
-@app.route('/user/<int:id_user>', methods=['PUT'])
+@app.route('/users/<int:id_user>', methods=['PUT'])
 @login_required
 def update_user(id_user):
     data = request.get_json()
@@ -73,7 +80,7 @@ def update_user(id_user):
     db.session.commit()
     return jsonify({'message': 'User updated successfully!'})
 
-@app.route('/user/<int:id_user>', methods=['DELETE'])
+@app.route('/users/<int:id_user>', methods=['DELETE'])
 @login_required
 def delete_user(id_user):
     user = User.query.get_or_404(id_user)
