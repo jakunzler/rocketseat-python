@@ -1,3 +1,3 @@
 # Sample flask authentication
 
-Repositorio para armazenar código da API flask para autenticação.
+Repositório para armazenar código da API flask para autenticação.
