@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "7cd89262-24a7-4137-9e7a-02816448e900",
+		"name": "API User Basics",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37873274"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Home",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "hello-world",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/hello-world",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"hello-world"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/login",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/logout",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"family_name\": \"Company\",\n    \"given_name\": \"Admin\",\n    \"username\": \"admin\",\n    \"email\": \"admin@email.com\",\n    \"password\": \"1234\",\n    \"is_admin\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users/2",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"family_name\": \"Kunzler\",\n    \"given_name\": \"Jonas A\",\n    \"password\": \"12345\",\n    \"is_admin\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users/1",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users/1",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dishes",
+			"item": [
+				{
+					"name": "Create dish",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dish_name\": \"Pão doce\",\n    \"dish_description\": \"massa de farinha de batata doce\",\n    \"is_allowed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/dishes",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get dishes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get dish",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users/2",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update dish",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"family_name\": \"Kunzler\",\n    \"given_name\": \"Jonas A\",\n    \"password\": \"12345\",\n    \"is_admin\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users/1",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete dish",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}{{PORT}}/users/1",
+							"host": [
+								"{{BASE_URL}}{{PORT}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
