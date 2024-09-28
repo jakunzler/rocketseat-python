@@ -1,5 +1,8 @@
 {
   "python.analysis.extraPaths": [
     "./flask_auth/challenge-solution"
-  ]
+  ],
+  "files.exclude":{
+    "**/__pycache__": true,
+  }
 }
