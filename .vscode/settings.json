@@ -1,4 +1,6 @@
 {
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
   "python.analysis.extraPaths": [
     "./flask_auth/challenge-solution"
   ],
