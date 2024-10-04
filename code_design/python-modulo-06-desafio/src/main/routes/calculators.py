@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from src.main.factories.calculator4_factory import calculator4_factory
-from errors.error_controller import handle_errors
+from src.errors.error_controller import handle_errors
 
 calc_route_bp = Blueprint("calc_routes", __name__)
 
