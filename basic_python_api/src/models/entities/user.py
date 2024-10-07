@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, BIGINT, ForeignKey
+from sqlalchemy import Column, String, BIGINT, ForeignKey, Boolean
 from src.models.settings.base import Base
 
 class User(Base):
@@ -10,7 +10,7 @@ class User(Base):
     username = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
-    is_admin = Column(bool, default=False)
+    is_admin = Column(Boolean, default=False)
     role_id = Column(BIGINT, ForeignKey("roles.id"))
     
     def __repr__(self):
