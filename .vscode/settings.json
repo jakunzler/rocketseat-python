@@ -2,9 +2,12 @@
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "python.analysis.extraPaths": [
-    "./flask_auth/challenge-solution"
+    "./flask_auth/challenge-solution",
+    "./intro_python/challenge-solution",
+    "./code_design/python-modulo-06-desafio"
   ],
   "files.exclude":{
     "**/__pycache__": true,
+    "**/.pytest_cache": true,
   }
 }

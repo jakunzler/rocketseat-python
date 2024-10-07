@@ -21,10 +21,10 @@ Creation date: 09/04/2024
 Last update: XX/XX/XXXX
 """
 
-from ..save import save
-from ..show import show
-from ..edit import edit
-from ..delete import delete
+from save import save
+from show import show
+from edit import edit
+from delete import delete
 
 contacts = []
 while True:
