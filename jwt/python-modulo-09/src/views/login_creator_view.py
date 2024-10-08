@@ -1,11 +1,11 @@
-from src.controllers.interfaces.login_creator import LoginCreatorInterface
+from src.controllers.interfaces.login_user import LoginUserInterface
 from src.views.http_types.http_request import HttpRequest
 from src.views.http_types.http_response import HttpResponse
 from src.errors.types.http_bad_request import HttpBadRequestError
 from .interfaces.view_interface import ViewInterface
 
 class LoginCreatorView(ViewInterface):
-    def __init__(self, controller: LoginCreatorInterface) -> None:
+    def __init__(self, controller: LoginUserInterface) -> None:
         self.__controller = controller
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:

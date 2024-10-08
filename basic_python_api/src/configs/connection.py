@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-class DBConnectionHanlder:
+class DBConnectionHandler:
     def __init__(self) -> None:
         self.__connection_string = "sqlite:///storage.db"
         self.__engine = None
@@ -24,4 +24,4 @@ class DBConnectionHanlder:
         self.session.close()
 
 
-db_connection_handler = DBConnectionHanlder()
+db_connection_handler = DBConnectionHandler()

@@ -1,12 +1,12 @@
-from src.models.settings.db_connection_handler import db_connection_handler
+from src.models.settings.connection import DBConnectionHandler
 from src.models.repositories.user_repository import UserRepository
-from src.controllers.user_register import UserRegister
+from src.controllers.create_user import CreateUser
 from src.views.user_register_view import UserRegisterView
 
 def user_register_composer():
-    conn = db_connection_handler.get_connection()
-    model = UserRepository(conn)
-    controller = UserRegister(model)
+    conn = DBConnectionHandler()
+    model = UserRepository(conn.connect_to_db())
+    controller = CreateUser(model)
     view = UserRegisterView(controller)
 
     return view

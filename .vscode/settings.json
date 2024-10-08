@@ -4,7 +4,8 @@
   "python.analysis.extraPaths": [
     "./flask_auth/challenge-solution",
     "./intro_python/challenge-solution",
-    "./code_design/python-modulo-06-desafio"
+    "./code_design/python-modulo-06-desafio",
+    "./basic_python_api"
   ],
   "files.exclude":{
     "**/__pycache__": true,
