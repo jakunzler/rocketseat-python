@@ -1,13 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import os
 
 
-class DBConnectionHandler:
+class DBConnectionHanlder:
     def __init__(self) -> None:
-        self.db_folder = os.path.join(os.getcwd(), 'src/app/db')
-        os.makedirs(self.db_folder, exist_ok=True)
-        self.__connection_string = f"sqlite:///{self.db_folder}/storage.db"
+        self.__connection_string = "sqlite:///storage.db"
         self.__engine = None
         self.session = None
 
@@ -27,4 +24,4 @@ class DBConnectionHandler:
         self.session.close()
 
 
-db_connection_handler = DBConnectionHandler()
+db_connection_handler = DBConnectionHanlder()
