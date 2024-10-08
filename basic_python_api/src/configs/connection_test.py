@@ -1,4 +1,4 @@
-from connection import db_connection_handler
+from .connection import db_connection_handler
 from sqlalchemy.engine import Engine
 
 
