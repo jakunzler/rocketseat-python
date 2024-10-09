@@ -1,6 +1,6 @@
 import pytest
 from src.drivers.password_handler import PasswordHandler
-from .login_user import LoginUser
+from src.controllers.login_user import LoginUser
 
 username = "meuUsername"
 password = "minhaSenha"

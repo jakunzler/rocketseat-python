@@ -1,8 +1,8 @@
 import pytest
-from src.models.settings.connection import db_connection_handler
-from .user_repository import UserRepository
+from src.configs.connection import db_connection_handler
+# from .user_repository import UserRepository
 
-# db_connection_handler.connect_to_db()
+db_connection_handler.connect_to_db()
 
 @pytest.mark.skip(reason="interacao com o banco")
 def test_create_user():

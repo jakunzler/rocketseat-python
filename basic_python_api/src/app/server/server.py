@@ -1,9 +1,9 @@
 from flask import Flask
-# from src.models.settings.db_connection_handler import db_connection_handler
+from src.configs.connection import db_connection_handler
 
 from src.app.routes.user_routes import user_routes_bp
 
-# db_connection_handler.connect()
+db_connection_handler.connect_to_db()
 
 app = Flask(__name__)
 
