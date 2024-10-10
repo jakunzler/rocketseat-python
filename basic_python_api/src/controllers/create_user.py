@@ -12,7 +12,7 @@ class CreateUser(CreateUserInterface):
     def create(self, username: str, password: str) -> Dict:
         hashed_password = self.__create_hashed_password(password)
         
-        self.__registry_new_user(username, hashed_password)
+        self.__create_new_user(username, hashed_password)
 
         return self.__format_response(username)
     
@@ -21,8 +21,8 @@ class CreateUser(CreateUserInterface):
 
         return hashed_password
     
-    def __registry_new_user(self, username: str, hashed_password: str) -> None:
-        self.__user_repository.registry_user(username, hashed_password)
+    def __create_new_user(self, username: str, hashed_password: str) -> None:
+        self.__user_repository.create_user(username, hashed_password)
 
     def __format_response(self, username: str) -> Dict:
         return {

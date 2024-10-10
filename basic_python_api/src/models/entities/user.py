@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, String, BIGINT, ForeignKey, Boolean
+from sqlalchemy import Column, String, Boolean
 from src.configs.base import Base
 
 class User(Base):

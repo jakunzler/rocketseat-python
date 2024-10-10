@@ -1,11 +1,11 @@
-from src.controllers.interfaces.login_user import LoginUserInterface
+from src.controllers.interfaces.create_user import CreateUserInterface
 from src.views.http_types.http_request import HttpRequest
 from src.views.http_types.http_response import HttpResponse
 from src.errors.types.http_bad_request import HttpBadRequestError
 from .interfaces.view_interface import ViewInterface
 
-class LoginCreatorView(ViewInterface):
-    def __init__(self, controller: LoginUserInterface) -> None:
+class CreateUserView(ViewInterface):
+    def __init__(self, controller: CreateUserInterface) -> None:
         self.__controller = controller
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
@@ -14,7 +14,7 @@ class LoginCreatorView(ViewInterface):
         self.__validate_inputs(username, password)
 
         response = self.__controller.create(username, password)
-        return HttpResponse(body={ "data": response }, status_code=200)
+        return HttpResponse(body={ "data": response }, status_code=201)
 
     def __validate_inputs(self, username: any, password: any) -> None:
         if (

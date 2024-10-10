@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from sqlalchemy.orm.exc import NoResultFound
 from src.models.entities.user import User
 from src.models.interfaces.user_repository import UserRepositoryInterface

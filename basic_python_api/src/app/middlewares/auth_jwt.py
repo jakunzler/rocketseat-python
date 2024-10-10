@@ -8,7 +8,7 @@ def auth_jwt_verify():
     user_id = request.headers.get("uid")
 
     if not raw_token or not user_id:
-        raise HttpUnauthorizedError("Invalid Auth informations")
+        raise HttpUnauthorizedError("Invalid Auth information")
 
     token = raw_token.split()[1]
     token_information = jwt_handle.decode_jwt_token(token)

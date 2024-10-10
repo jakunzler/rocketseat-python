@@ -1,12 +1,12 @@
 from src.configs.connection import db_connection_handler
 from src.models.repositories.user_repository import UserRepository
 from src.controllers.login_user import LoginUser
-from src.views.login_creator_view import LoginCreatorView
+from src.views.login_user_view import LoginUserView
 
-def login_creator_composer():
+def login_user_composer():
     conn = db_connection_handler
     model = UserRepository(conn.connect_to_db())
     controller = LoginUser(model)
-    view = LoginCreatorView(controller)
+    view = LoginUserView(controller)
 
     return view

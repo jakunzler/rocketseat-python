@@ -1,11 +1,11 @@
-from src.controllers.interfaces.create_user import CreateUserInterface
+from src.controllers.interfaces.login_user import LoginUserInterface
 from src.views.http_types.http_request import HttpRequest
 from src.views.http_types.http_response import HttpResponse
 from src.errors.types.http_bad_request import HttpBadRequestError
 from .interfaces.view_interface import ViewInterface
 
-class UserRegisterView(ViewInterface):
-    def __init__(self, controller: CreateUserInterface) -> None:
+class LoginUserView(ViewInterface):
+    def __init__(self, controller: LoginUserInterface) -> None:
         self.__controller = controller
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
@@ -13,8 +13,8 @@ class UserRegisterView(ViewInterface):
         password = http_request.body.get("password")
         self.__validate_inputs(username, password)
 
-        response = self.__controller.registry(username, password)
-        return HttpResponse(body={ "data": response }, status_code=201)
+        response = self.__controller.create(username, password)
+        return HttpResponse(body={ "data": response }, status_code=200)
 
     def __validate_inputs(self, username: any, password: any) -> None:
         if (
