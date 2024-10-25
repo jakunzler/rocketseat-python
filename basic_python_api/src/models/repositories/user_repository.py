@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 from src.models.entities.user import User
 from src.models.interfaces.user_repository import UserRepositoryInterface
@@ -13,8 +14,7 @@ class UserRepository(UserRepositoryInterface):
                 (
                     database.session.query(User)
                     .filter(
-                        User.username == username, 
-                        User.email == email, 
+                        or_(User.username == username, User.email == email),
                         User.password == password
                     )
                     .one()

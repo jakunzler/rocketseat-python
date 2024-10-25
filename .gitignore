@@ -65,6 +65,9 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
+# Firebase stuff:
+basic_python_api/src/configs/firebase/*.json
+
 # Scrapy stuff:
 .scrapy
 
