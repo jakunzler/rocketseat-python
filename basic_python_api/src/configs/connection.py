@@ -2,6 +2,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import os
 
+from src.models.entities.user import User # pylint: disable=unused-import
+from src.models.entities.ai import AI # pylint: disable=unused-import
+
 class DBConnectionHandler:
     def __init__(self) -> None:
         self.db_folder = os.path.join(os.getcwd(), 'src/db')
@@ -10,10 +13,11 @@ class DBConnectionHandler:
         self.__engine = None
         self.session = None
 
-    def connect_to_db(self, Base=None):
+    def connect_to_db(self, base=None):
         self.__engine = create_engine(self.__connection_string)
-        if Base:
-            Base.metadata.create_all(self.__engine)
+        if base:
+            base.metadata.reflect(self.__engine)
+            base.metadata.create_all(self.__engine)
 
     def get_engine(self):
         return self.__engine

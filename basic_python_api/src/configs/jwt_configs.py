@@ -1,7 +1,10 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 jwt_infos = {
-    "KEY": os.getenv("JWT_SECRET_KEY"),
-    "ALGORITHM": os.getenv("ALGORITHM"),
-    "JWT_HOURS": os.getenv("JWT_HOURS")
+    "KEY": os.environ.get("JWT_SECRET_KEY"),
+    "ALGORITHM": os.environ.get("ALGORITHM"),
+    "JWT_HOURS": os.environ.get("JWT_HOURS")
 }

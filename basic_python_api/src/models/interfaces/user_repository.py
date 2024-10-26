@@ -13,13 +13,13 @@ class UserRepositoryInterface(ABC):
     def create_user(self, username: str, email: str, password: str) -> None: pass
 
     @abstractmethod
-    def get_user_by_username(self, username: str) -> Tuple[int, str, str]: pass
+    def get_user_by_username(self, username: str) -> Tuple[str, str, str]: pass
 
     @abstractmethod
-    def get_user_by_id(self, user_id: int) -> Tuple[int, str, str]: pass
+    def get_user_by_id(self, user_id: int) -> Tuple[str, str, str]: pass
     
     @abstractmethod
-    def get_all_users(self) -> Tuple[Tuple[int, str, str]]: pass
+    def get_all_users(self) -> Tuple[Tuple[str, str, str]]: pass
     
     @abstractmethod
     def update_user(self, user_id: int, first_name: str, last_name: str, username: str, email: str, password: str, is_admin: bool) -> None: pass

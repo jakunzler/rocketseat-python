@@ -1,7 +1,8 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from src.configs.base import Base
 from src.configs.connection import db_connection_handler
+
+from src.configs.base import Base
 
 from src.app.routes.user_routes import user_routes_bp
 from src.app.routes.ai_routes import ai_routes_bp

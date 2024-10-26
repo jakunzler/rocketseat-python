@@ -1,4 +1,4 @@
-from src.controllers.interfaces.login_user import LoginUserInterface
+from src.controllers.interfaces.user.login_user import LoginUserInterface
 from src.views.http_types.http_request import HttpRequest
 from src.views.http_types.http_response import HttpResponse
 from src.errors.types.http_bad_request import HttpBadRequestError

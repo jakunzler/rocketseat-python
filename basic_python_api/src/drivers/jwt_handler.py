@@ -5,7 +5,7 @@ from src.configs.jwt_configs import jwt_infos
 
 class JwtHandler:
 
-    def create_jwt_token(self, body: Dict = {}) -> str:
+    def create_jwt_token(self, body: Dict = {}) -> str: # pylint: disable=missing-function-docstring dangerous-default-value
         token = jwt.encode(
             payload={
                 'exp': datetime.now(timezone.utc) + timedelta(hours=int(jwt_infos["JWT_HOURS"])),

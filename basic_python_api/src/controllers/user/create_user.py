@@ -1,7 +1,7 @@
 from typing import Dict
 from src.models.interfaces.user_repository import UserRepositoryInterface
 from src.drivers.password_handler import PasswordHandler
-from .interfaces.create_user import CreateUserInterface
+from ..interfaces.user.create_user import CreateUserInterface
 
 class CreateUser(CreateUserInterface):
     def __init__(self, user_repository: UserRepositoryInterface) -> None:
