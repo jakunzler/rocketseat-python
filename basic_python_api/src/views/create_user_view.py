@@ -10,16 +10,16 @@ class CreateUserView(ViewInterface):
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
         username = http_request.body.get("username")
+        email = http_request.body.get("email")
         password = http_request.body.get("password")
-        self.__validate_inputs(username, password)
+        self.__validate_inputs(username, email, password)
 
-        response = self.__controller.create(username, password)
+        response = self.__controller.create(username, email, password)
         return HttpResponse(body={ "data": response }, status_code=201)
 
-    def __validate_inputs(self, username: any, password: any) -> None:
+    def __validate_inputs(self, username: any, email: any, password: any) -> None:
+        is_input_not_null = username and email and password
+        is_input_str = isinstance(username, str) and isinstance(email, str) and isinstance(password, str)
         if (
-            not username
-            or not password
-            or not isinstance(username, str)
-            or not isinstance(password, str)
+            is_input_not_null is False or is_input_str is False
         ): raise HttpBadRequestError("Invalid Input")

@@ -39,12 +39,15 @@ class UserRepository(UserRepositoryInterface):
         email: str,
         password: str,
     ) -> None:
+        print(username, email, password)
+        print(self.__db_connection)
         with self.__db_connection as database:
             try:
                 user_info = User(
                     username=username,
                     email=email,
                     password=password,
+                    created_at=datetime.now(),
                 )
                 database.session.add(user_info)
                 database.session.commit()

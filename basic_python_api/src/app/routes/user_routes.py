@@ -25,7 +25,7 @@ def create_login():
         http_request = HttpRequest(body=request.json)
         http_response = login_user_composer().handle(http_request)
         return jsonify(http_response.body), http_response.status_code
-    except Exception as exception:
+    except Exception as exception: # pylint: disable=broad-except
         http_response = handle_errors(exception)
         return jsonify(http_response.body), http_response.status_code
 
@@ -35,7 +35,7 @@ def create_user():
         http_request = HttpRequest(body=request.json)
         http_response = create_user_composer().handle(http_request)
         return jsonify(http_response.body), http_response.status_code
-    except Exception as exception:
+    except Exception as exception: # pylint: disable=broad-except
         http_response = handle_errors(exception)
         return jsonify(http_response.body), http_response.status_code
 

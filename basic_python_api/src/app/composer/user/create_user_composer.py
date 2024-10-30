@@ -5,7 +5,9 @@ from src.views.create_user_view import CreateUserView
 
 def create_user_composer():
     conn = db_connection_handler
-    model = UserRepository(conn.connect_to_db())
+    conn.connect_to_db()
+    print(conn.get_engine())
+    model = UserRepository(conn)
     controller = CreateUser(model)
     view = CreateUserView(controller)
 
