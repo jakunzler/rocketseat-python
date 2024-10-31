@@ -5,7 +5,8 @@ from src.views.login_user_view import LoginUserView
 
 def login_user_composer():
     conn = db_connection_handler
-    model = UserRepository(conn.connect_to_db())
+    conn.connect_to_db()
+    model = UserRepository(conn)
     controller = LoginUser(model)
     view = LoginUserView(controller)
 

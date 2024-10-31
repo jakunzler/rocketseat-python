@@ -13,17 +13,29 @@ class LoginUser(LoginUserInterface):
         self.__jwt_handler = JwtHandler()
         self.__password_handle = PasswordHandler()
 
-    def login_user(self, username: str, password: str) -> Dict:
-        user = self.__find_user(username)
-        user_id = user[0]
-        hashed_password = user[2]
+    def login_user(self, username: str, email: str, password: str) -> Dict:        
+        if username:
+            user = self.__find_by_username(username)
+        elif email:
+            user = self.__find_by_email(email)
+        else:
+            raise HttpBadRequestError("Username or Email is required")
+
+        user_id = user.id
+        hashed_password = user.password
 
         self.__verify_correct_password(password, hashed_password)
         token = self.__create_jwt_token(user_id)
         return self.__format_response(username, token)
 
-    def __find_user(self, username: str) -> Tuple[str, str, str]:
+    def __find_by_username(self, username: str) -> Tuple[str, str, str]:
         user = self.__user_repository.get_user_by_username(username)
+        if not user: raise HttpNotFoundError("User not found")
+
+        return user
+    
+    def __find_by_email(self, email: str) -> Tuple[str, str, str]:
+        user = self.__user_repository.get_user_by_email(email)
         if not user: raise HttpNotFoundError("User not found")
 
         return user

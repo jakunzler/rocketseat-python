@@ -43,18 +43,18 @@ def create_user():
 def get_users():
     return jsonify({"message": "User: Get Users!"})
 
-@user_routes_bp.route("/user", methods=["GET"])
-def get_user():
-    return jsonify({"message": "User: Get User!"})
+@user_routes_bp.route("<user_id>", methods=["GET"])
+def get_user(user_id):
+    return jsonify({"message": "User: Get User {}!".format(user_id)})
 
-@user_routes_bp.route("/user", methods=["PUT"])
-def update_user():
-    return jsonify({"message": "User: Update User!"})
+@user_routes_bp.route("<user_id>", methods=["PUT"])
+def update_user(user_id):
+    return jsonify({"message": "User: Update User with ID {}".format(user_id)})
 
-@user_routes_bp.route("/user", methods=["DELETE"])
-def delete_user():
+@user_routes_bp.route("<user_id>", methods=["DELETE"])
+def delete_user(user_id):
     return jsonify({"message": "User: Delete User!"})
 
-@user_routes_bp.route("/user", methods=["PATCH"])
-def patch_user():
+@user_routes_bp.route("<user_id>", methods=["PATCH"])
+def patch_user(user_id):
     return jsonify({"message": "User: Patch User!"})

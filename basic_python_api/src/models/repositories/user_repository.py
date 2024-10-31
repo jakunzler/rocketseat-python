@@ -39,8 +39,6 @@ class UserRepository(UserRepositoryInterface):
         email: str,
         password: str,
     ) -> None:
-        print(username, email, password)
-        print(self.__db_connection)
         with self.__db_connection as database:
             try:
                 user_info = User(
@@ -62,6 +60,19 @@ class UserRepository(UserRepositoryInterface):
                     database.session
                     .query(User)
                     .filter(User.username == username)
+                    .one()
+                )
+                return user_info
+            except NoResultFound:
+                return None
+            
+    def get_user_by_email(self, email: str) -> User:
+        with self.__db_connection as database:
+            try:
+                user_info = (
+                    database.session
+                    .query(User)
+                    .filter(User.email == email)
                     .one()
                 )
                 return user_info
