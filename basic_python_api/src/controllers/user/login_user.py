@@ -6,7 +6,6 @@ from src.errors.types.http_bad_request import HttpBadRequestError
 from src.errors.types.http_not_found import HttpNotFoundError
 from ..interfaces.user.login_user import LoginUserInterface
 
-
 class LoginUser(LoginUserInterface):
     def __init__(self, user_repository: UserRepositoryInterface) -> None:
         self.__user_repository = user_repository

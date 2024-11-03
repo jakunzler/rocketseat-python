@@ -1,8 +1,9 @@
 import uuid
 from sqlalchemy import Column, String, Boolean, DateTime
+from flask_login import UserMixin
 from src.configs.base import Base
 
-class User(Base):
+class User(Base, UserMixin):
     __tablename__ = "users"
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
