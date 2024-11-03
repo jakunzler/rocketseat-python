@@ -2,7 +2,7 @@ from flask import request
 from typing import Dict
 from src.drivers.jwt_handler import JwtHandler
 from src.errors.types.http_unauthorized import HttpUnauthorizedError
-from ..interfaces.user.logout_user import LogoutUserInterface
+from ..interfaces.auth.logout_user import LogoutUserInterface
 
 class LogoutUser(LogoutUserInterface):
     def __init__(self) -> None:

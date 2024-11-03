@@ -1,7 +1,7 @@
 import pytest
 from src.views.http_types.http_request import HttpRequest
 from src.views.http_types.http_response import HttpResponse
-from src.views.create_ai_view import CreateAIView
+from src.views.ai.create_ai_view import CreateAIView
 
 class MockController:
     def create(self, name, model):

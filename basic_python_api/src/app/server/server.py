@@ -12,6 +12,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
 
     from src.configs.base import Base
 
+    from src.app.routes.auth_routes import auth_routes_bp
     from src.app.routes.user_routes import user_routes_bp
     from src.app.routes.ai_routes import ai_routes_bp
 
@@ -28,6 +29,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     def hello_world():
         return jsonify({"message": "Hello World!"})
 
+    app.register_blueprint(auth_routes_bp, url_prefix="/auth")
     app.register_blueprint(user_routes_bp, url_prefix="/user")
     app.register_blueprint(ai_routes_bp, url_prefix="/ai")
 

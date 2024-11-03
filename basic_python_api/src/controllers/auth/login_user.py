@@ -4,7 +4,7 @@ from src.drivers.jwt_handler import JwtHandler
 from src.drivers.password_handler import PasswordHandler
 from src.errors.types.http_bad_request import HttpBadRequestError
 from src.errors.types.http_not_found import HttpNotFoundError
-from ..interfaces.user.login_user import LoginUserInterface
+from ..interfaces.auth.login_user import LoginUserInterface
 
 class LoginUser(LoginUserInterface):
     def __init__(self, user_repository: UserRepositoryInterface) -> None:
