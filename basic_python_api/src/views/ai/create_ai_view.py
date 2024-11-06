@@ -2,7 +2,7 @@ from src.controllers.interfaces.ai.create_ai import CreateAIInterface
 from src.views.http_types.http_request import HttpRequest
 from src.views.http_types.http_response import HttpResponse
 from src.errors.types.http_bad_request import HttpBadRequestError
-from .interfaces.view_interface import ViewInterface
+from ..interfaces.view_interface import ViewInterface
 
 class CreateAIView(ViewInterface):
     def __init__(self, controller: CreateAIInterface) -> None:

@@ -1,3 +1,4 @@
+from src.views.http_types.http_request import HttpRequest
 from src.views.http_types.http_response import HttpResponse
 from .logout_user_view import LogoutUserView
 
@@ -6,11 +7,11 @@ class MockController:
         return "Logout Successful"
     
 def test_handle_logout_user():
-
     mock_controller = MockController()
     logout_user_view = LogoutUserView(mock_controller)
-
-    response = logout_user_view.handle({})
+    
+    http_request = HttpRequest(headers={ "Authorization": "Bearer token" })
+    response = logout_user_view.handle(http_request)
 
     assert isinstance(response, HttpResponse)
     assert response.body == {'data': 'Logout Successful'}

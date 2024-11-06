@@ -1,4 +1,3 @@
-from flask import request
 from typing import Dict
 from src.drivers.jwt_handler import JwtHandler
 from src.errors.types.http_unauthorized import HttpUnauthorizedError
@@ -8,8 +7,8 @@ class LogoutUser(LogoutUserInterface):
     def __init__(self) -> None:
         self.__jwt_handler = JwtHandler()
 
-    def logout_user(self) -> Dict:
-        raw_token = request.headers.get("Authorization")
+    def logout_user(self, raw_token) -> Dict:
+        print(raw_token)
         if not raw_token or not raw_token.startswith("Bearer "):
             raise HttpUnauthorizedError("Invalid Auth information")
         

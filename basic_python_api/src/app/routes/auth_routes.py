@@ -13,6 +13,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
 
     from src.app.composer.auth.login_user_composer import login_user_composer
     from src.app.composer.auth.get_revoked_tokens_composer import get_revoked_tokens_composer
+    from src.app.composer.auth.clear_revoked_tokens_composer import clear_revoked_tokens_composer
     from src.app.composer.auth.logout_user_composer import logout_user_composer
 
     from src.errors.error_handler import handle_errors
@@ -34,6 +35,16 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
         try:
             http_request = HttpRequest(body=request.json)
             http_response = get_revoked_tokens_composer().handle(http_request)
+            return jsonify(http_response.body), http_response.status_code
+        except Exception as exception: # pylint: disable=broad-except
+            http_response = handle_errors(exception)
+            return jsonify(http_response.body), http_response.status_code
+        
+    @auth_routes_bp.route("/", methods=["PUT"])
+    def clear_revoked_tokens():
+        try:
+            http_request = HttpRequest(body=request.json)
+            http_response = clear_revoked_tokens_composer().handle(http_request)
             return jsonify(http_response.body), http_response.status_code
         except Exception as exception: # pylint: disable=broad-except
             http_response = handle_errors(exception)

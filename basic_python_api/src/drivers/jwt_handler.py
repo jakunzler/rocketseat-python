@@ -31,10 +31,10 @@ class JwtHandler:
         invalid_tokens.add(token)
         return True
     
-    def get_revoke_list(self):
+    def get_revoked_list(self):
         return invalid_tokens
     
-    def clear_revoke_list(self):
+    def clear_revoked_list(self):
         invalid_tokens.clear()
         return True
 

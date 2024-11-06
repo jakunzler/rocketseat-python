@@ -41,7 +41,7 @@ def test_revoke_jwt_token():
 
     token = jwt_handler.create_jwt_token(body)
     is_revoked = jwt_handler.revoke_jwt_token(token)
-    revoked_tokens = jwt_handler.get_revoke_list()
+    revoked_tokens = jwt_handler.get_revoked_list()
     
     assert isinstance(is_revoked, bool)
     assert revoked_tokens is not None
@@ -60,8 +60,8 @@ def test_clear_revoke_list():
     
     token = jwt_handler.create_jwt_token(body)
     jwt_handler.revoke_jwt_token(token)
-    jwt_handler.clear_revoke_list()
-    revoked_tokens = jwt_handler.get_revoke_list()
+    jwt_handler.clear_revoked_list()
+    revoked_tokens = jwt_handler.get_revoked_list()
     
     assert len(revoked_tokens) == 0
     assert revoked_tokens == set()
