@@ -33,7 +33,8 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     @auth_routes_bp.route("/", methods=["GET"])
     def get_revoked_tokens():
         try:
-            http_request = HttpRequest(body=request.json)
+            auth_jwt_verify()
+            http_request = HttpRequest()
             http_response = get_revoked_tokens_composer().handle(http_request)
             return jsonify(http_response.body), http_response.status_code
         except Exception as exception: # pylint: disable=broad-except
@@ -43,7 +44,8 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     @auth_routes_bp.route("/", methods=["PUT"])
     def clear_revoked_tokens():
         try:
-            http_request = HttpRequest(body=request.json)
+            auth_jwt_verify()
+            http_request = HttpRequest()
             http_response = clear_revoked_tokens_composer().handle(http_request)
             return jsonify(http_response.body), http_response.status_code
         except Exception as exception: # pylint: disable=broad-except

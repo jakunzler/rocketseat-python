@@ -9,5 +9,5 @@ class LogoutUserView(ViewInterface):
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
         token = http_request.headers.get("Authorization")
-        response = self.__controller.logout_user()
+        response = self.__controller.logout_user(token)
         return HttpResponse(body={ "data": response }, status_code=200)

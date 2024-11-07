@@ -8,7 +8,6 @@ class LogoutUser(LogoutUserInterface):
         self.__jwt_handler = JwtHandler()
 
     def logout_user(self, raw_token) -> Dict:
-        print(raw_token)
         if not raw_token or not raw_token.startswith("Bearer "):
             raise HttpUnauthorizedError("Invalid Auth information")
         

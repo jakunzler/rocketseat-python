@@ -7,7 +7,9 @@ class ClearRevokedTokens(ClearRevokedTokensInterface):
         self.__jwt_handler = JwtHandler()
         
     def clear_revoked_tokens(self) -> Dict:
-        self.__jwt_handler.clear_revoked_list()
+        is_clear = self.__jwt_handler.clear_revoked_list()
+        if not is_clear:
+            raise Exception("Error clearing revoked tokens")
         return self.__format_response()
     
     def __format_response(self) -> Dict:

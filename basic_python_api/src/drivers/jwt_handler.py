@@ -4,7 +4,7 @@ import jwt
 from src.configs.jwt_configs import jwt_infos
 
 invalid_tokens = set()
-    
+
 class JwtHandler:
     def create_jwt_token(self, body: Dict = {}) -> str: # pylint: disable=missing-function-docstring dangerous-default-value
         token = jwt.encode(

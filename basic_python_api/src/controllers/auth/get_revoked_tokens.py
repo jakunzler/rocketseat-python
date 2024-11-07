@@ -12,6 +12,7 @@ class GetRevokedTokens(GetRevokedTokensInterface):
         return self.__format_response(invalid_tokens)
         
     def __format_response(self, tokens: set) -> Dict:
+        tokens = list(tokens)
         return {
             "revoked_tokens": tokens
         }

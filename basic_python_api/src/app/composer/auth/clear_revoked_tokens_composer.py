@@ -1,8 +1,8 @@
-from src.controllers.auth.get_revoked_tokens import GetRevokedTokens
-from src.views.auth.get_revoked_tokens_view import GetRevokedTokensView
+from src.controllers.auth.clear_revoked_tokens import ClearRevokedTokens
+from src.views.auth.clear_revoked_tokens_view import ClearRevokedTokensView
 
 def clear_revoked_tokens_composer():
-    controller = GetRevokedTokens()
-    view = GetRevokedTokensView(controller)
+    controller = ClearRevokedTokens()
+    view = ClearRevokedTokensView(controller)
     
     return view
