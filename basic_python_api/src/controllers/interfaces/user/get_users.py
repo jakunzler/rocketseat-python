@@ -1,7 +1,7 @@
 from typing import Dict
 from abc import ABC, abstractmethod
 
-class CreateUserInterface(ABC):
+class GetUsersInterface(ABC):
 
     @abstractmethod
-    def get_users(self, username: str, password: str) -> Dict: pass
+    def get_users(self) -> Dict: pass

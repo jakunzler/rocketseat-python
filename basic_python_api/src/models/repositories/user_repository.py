@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import or_
+from sqlalchemy import or_, update
 from sqlalchemy.orm.exc import NoResultFound
 from src.models.entities.user import User
 from src.models.interfaces.user_repository import UserRepositoryInterface
@@ -38,7 +38,7 @@ class UserRepository(UserRepositoryInterface):
         username: str,
         email: str,
         password: str,
-    ) -> None:
+    ) -> User:
         with self.__db_connection as database:
             try:
                 user_info = User(
@@ -49,6 +49,7 @@ class UserRepository(UserRepositoryInterface):
                 )
                 database.session.add(user_info)
                 database.session.commit()
+                return database.session.query(User).filter(User.username == username).one()
             except Exception as exception:
                 database.session.rollback()
                 raise exception
@@ -82,50 +83,50 @@ class UserRepository(UserRepositoryInterface):
     def get_user_by_id(self, user_id: int) -> User:
         with self.__db_connection as database:
             try:
-                user_info = database.session.query(User).get(user_id)
+                user_info = (
+                    database.session
+                    .query(User)
+                    .filter(User.id == user_id)
+                    .one()
+                )
                 return user_info
             except NoResultFound:
                 return None
             
-    def get_all_users(self) -> list:
+    def get_all_users(self) -> list[User]:
         with self.__db_connection as database:
             try:
                 all_users = database.session.query(User).all()
-                return all_users
+                return all_users if all_users else []
             except NoResultFound:
-                return None
+                return []
 
-    def update_user(
-        self,
-        user_id: int,
-        first_name: str,
-        last_name: str,
-        username: str,
-        email: str,
-        password: str,
-        is_admin: bool,
-    ) -> None:
+    def update_user(self, partial_user: User) -> User:
         with self.__db_connection as database:
             try:
-                user_info = User(
-                    id=user_id,
-                    first_name=first_name,
-                    last_name=last_name,
-                    username=username,
-                    email=email,
-                    password=password,
-                    is_admin=is_admin,
+                partial_user.updated_at = datetime.now()
+                
+                database.session.execute(
+                    update(User),
+                    [
+                        partial_user.__dict__
+                    ]
                 )
-                database.session.add(user_info)
                 database.session.commit()
+                return database.session.query(User).filter(User.username == partial_user.username).one()
             except Exception as exception:
                 database.session.rollback()
                 raise exception
 
-    def delete_user(self, user_id: int) -> None:
+    def delete_user(self, user_id: int) -> bool:
         with self.__db_connection as database:
             try:
-                user_info = database.session.query(User).get(user_id)
+                user_info = (
+                    database.session
+                    .query(User)
+                    .filter(User.id == user_id)
+                    .one()
+                )
                 database.session.delete(user_info)
                 database.session.commit()
             except Exception as exception:

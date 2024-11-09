@@ -12,6 +12,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     from src.app.middlewares.auth_jwt import auth_jwt_verify
 
     from src.app.composer.user.create_user_composer import create_user_composer
+    from src.app.composer.user.get_users_composer import get_users_composer
 
     from src.errors.error_handler import handle_errors
 
@@ -30,7 +31,19 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     @user_routes_bp.route("/", methods=["GET"])
     def get_users():
         auth_jwt_verify()
-        return jsonify({"message": "User: Get Users!"})
+        try:
+            data = request.get_json(silent=True)
+            if data and 'page_length' in data:
+                http_request = HttpRequest(body=data)
+                http_response = get_users_composer().handle(http_request)
+                return jsonify(http_response.body), http_response.status_code
+
+            http_request = HttpRequest()
+            http_response = get_users_composer().handle(http_request)
+            return jsonify(http_response.body), http_response.status_code
+        except Exception as exception: # pylint: disable=broad-except
+            http_response = handle_errors(exception)
+            return jsonify(http_response.body), http_response.status_code
 
     @user_routes_bp.route("<user_id>", methods=["GET"])
     def get_user(user_id):
@@ -45,12 +58,12 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     @user_routes_bp.route("<user_id>", methods=["DELETE"])
     def delete_user(user_id):
         auth_jwt_verify()
-        return jsonify({"message": "User: Delete User!"})
+        return jsonify({"message": "User: Delete User with ID {}".format(user_id)})
 
     @user_routes_bp.route("<user_id>", methods=["PATCH"])
     def patch_user(user_id):
         auth_jwt_verify()
-        return jsonify({"message": "User: Patch User!"})
+        return jsonify({"message": "User: Patch User with ID {}".format(user_id)})
 
 elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     from flask import Blueprint, jsonify, request
