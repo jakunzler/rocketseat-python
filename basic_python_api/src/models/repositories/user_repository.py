@@ -3,11 +3,12 @@ from sqlalchemy import or_, update
 from sqlalchemy.orm.exc import NoResultFound
 from src.models.entities.user import User
 from src.models.interfaces.user_repository import UserRepositoryInterface
+from src.errors.types.http_bad_request import HttpBadRequestError
 
 class UserRepository(UserRepositoryInterface):
     def __init__(self, db_connection) -> None:
         self.__db_connection = db_connection
-        
+
     def authenticate_user(self, username: str, email: str, password: str) -> bool:
         with self.__db_connection as database:
             try:
@@ -22,7 +23,7 @@ class UserRepository(UserRepositoryInterface):
                 return True
             except NoResultFound:
                 return False
-            
+
     def set_first_login_date(self, user_id: int) -> None:
         with self.__db_connection as database:
             try:
@@ -66,7 +67,7 @@ class UserRepository(UserRepositoryInterface):
                 return user_info
             except NoResultFound:
                 return None
-            
+
     def get_user_by_email(self, email: str) -> User:
         with self.__db_connection as database:
             try:
@@ -79,7 +80,7 @@ class UserRepository(UserRepositoryInterface):
                 return user_info
             except NoResultFound:
                 return None
-            
+
     def get_user_by_id(self, user_id: int) -> User:
         with self.__db_connection as database:
             try:
@@ -92,28 +93,59 @@ class UserRepository(UserRepositoryInterface):
                 return user_info
             except NoResultFound:
                 return None
-            
-    def get_all_users(self) -> list[User]:
+
+    def get_all_users(self, page: int = None, page_length: int = None) -> list[User]:
+        """
+        Obtém uma lista de usuários com paginação.
+
+        :param page: Número da página (começa em 1).
+        :param page_length: Número de usuários por página.
+        :return: Lista paginada de usuários.
+        """
+
+        if not isinstance(page, int) and page is not None:
+            raise HttpBadRequestError("page must be integer.")
+        if not isinstance(page_length, int) and page_length is not None:
+            raise HttpBadRequestError("page_length must be integer.")
+        if not page:
+            page = 1
+        elif page < 1:
+            raise HttpBadRequestError("page must be greater than 0.")
+
         with self.__db_connection as database:
             try:
-                all_users = database.session.query(User).all()
-                return all_users if all_users else []
+                query = database.session.query(User)
+
+                if page_length:
+                    if page_length < 1:
+                        raise HttpBadRequestError("page_length must be greater than 0.")
+                    offset = (page - 1) * page_length
+                    query = query.limit(page_length).offset(offset)
+
+                paginated_users = query.all()
+
+                return paginated_users if paginated_users else []
             except NoResultFound:
                 return []
 
     def update_user(self, partial_user: User) -> User:
         with self.__db_connection as database:
             try:
-                partial_user.updated_at = datetime.now()
-                
+                partial_user["updated_at"] = datetime.now()
+
                 database.session.execute(
                     update(User),
                     [
-                        partial_user.__dict__
+                        partial_user
                     ]
                 )
                 database.session.commit()
-                return database.session.query(User).filter(User.username == partial_user.username).one()
+                return (
+                    database.session
+                    .query(User)
+                    .filter(User.id == partial_user["id"])
+                    .one()
+                )
             except Exception as exception:
                 database.session.rollback()
                 raise exception

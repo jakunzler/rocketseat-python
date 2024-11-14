@@ -33,3 +33,17 @@ class User(Base, UserMixin):
                 deleted_at={self.deleted_at},
                 ]""")
                 # role_id={self.role_id}]
+                
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "username": self.username,
+            "email": self.email,
+            "is_admin": self.is_admin,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+            "deleted_by": self.deleted_by,
+            "deleted_at": self.deleted_at,
+        }

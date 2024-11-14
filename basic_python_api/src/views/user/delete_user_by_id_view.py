@@ -1,17 +1,16 @@
-from src.controllers.interfaces.user.get_users import GetUsersInterface
+from src.controllers.interfaces.user.delete_user_by_id import DeleteUserByIdInterface
 from src.views.http_types.http_request import HttpRequest
 from src.views.http_types.http_response import HttpResponse
 from ..interfaces.view_interface import ViewInterface
 
-class GetUsersView(ViewInterface):
-    def __init__(self, controller: GetUsersInterface) -> None:
+class DeleteUserByIdView(ViewInterface):
+    def __init__(self, controller: DeleteUserByIdInterface) -> None:
         self.__controller = controller
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        body = http_request.body or {}
-        page = body.get("page")
-        page_length = body.get("page_length")
+        params = http_request.params
+        user_id = params
         
-        response = self.__controller.get_users(page, page_length)
+        response = self.__controller.delete_user_by_id(user_id)
 
         return HttpResponse(body={ "data": response }, status_code=200)

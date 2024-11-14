@@ -49,9 +49,9 @@ def test_get_all_users():
     user_repository = UserRepository(db_connection_handler)
     user = MockUser(username, email, password)
     user_repository.create_user(user.username, user.email, user.password)
-    
+
     users = user_repository.get_all_users()
-    
+
     assert len(users) == 1
     assert users[0].username == user.username
     assert users[0].email == user.email
@@ -64,26 +64,29 @@ def test_update_user():
     password = "password"
     user_repository = UserRepository(db_connection_handler)
     user = MockUser(username, email, password)
-    user = user_repository.create_user(user.username, user.email, user.password)
-    
-    user.first_name = "first_name"
-    user.last_name = "last_name"
-    user.username = "new_username"
-    user.email = "new_email"
-    user.password = "new_password"
-    
+    user = user_repository.create_user(user.username, user.email, user.password).to_dict()
+
+    user["first_name"] = "first_name"
+    user["last_name"] = "last_name"
+    user["username"] = "new_username"
+    user["email"] = "new_email"
+    user["password"] = "new_password"
+
     updated_user = user_repository.update_user(user)
     original_user = user_repository.get_user_by_username(username)
-    
-    assert updated_user.first_name == user.first_name
-    assert updated_user.last_name == user.last_name
-    assert updated_user.username == user.username
-    assert updated_user.email == user.email
-    assert updated_user.password == user.password
-    assert user_repository.authenticate_user(updated_user.username, updated_user.email, updated_user.password) is True
+
+    assert updated_user.first_name == user["first_name"]
+    assert updated_user.last_name == user["last_name"]
+    assert updated_user.username == user["username"]
+    assert updated_user.email == user["email"]
+    assert updated_user.password == user["password"]
+    assert user_repository.authenticate_user(
+        updated_user.username,
+        updated_user.email,
+        updated_user.password) is True
     assert user_repository.authenticate_user(username, email, password) is False
     assert original_user is None
-    
+
 def test_delete_user():
     username = "username"
     email = "email@email.com"
@@ -91,9 +94,9 @@ def test_delete_user():
     user_repository = UserRepository(db_connection_handler)
     user = MockUser(username, email, password)
     user = user_repository.create_user(user.username, user.email, user.password)
-    
+
     user_repository.delete_user(user.id)
-    
+
     assert user_repository.get_user_by_username(username) is None
     assert user_repository.get_user_by_email(email) is None
     assert user_repository.get_user_by_id(user.id) is None

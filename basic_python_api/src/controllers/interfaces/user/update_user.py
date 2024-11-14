@@ -1,7 +1,8 @@
+from src.models.entities.user import User
 from typing import Dict
 from abc import ABC, abstractmethod
 
-class CreateUserInterface(ABC):
+class UpdateUserInterface(ABC):
 
     @abstractmethod
-    def update_user(self, username: str, password: str) -> Dict: pass
+    def update_user(self, partial_user: User) -> Dict: pass

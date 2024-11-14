@@ -13,6 +13,10 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
 
     from src.app.composer.user.create_user_composer import create_user_composer
     from src.app.composer.user.get_users_composer import get_users_composer
+    from src.app.composer.user.get_user_by_id_composer import get_user_by_id_composer
+    from src.app.composer.user.update_user_composer import update_user_composer
+    from src.app.composer.user.update_user_attribute_composer import update_user_attribute_composer
+    from src.app.composer.user.delete_user_by_id_composer import delete_user_by_id_composer
 
     from src.errors.error_handler import handle_errors
 
@@ -33,12 +37,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
         auth_jwt_verify()
         try:
             data = request.get_json(silent=True)
-            if data and 'page_length' in data:
-                http_request = HttpRequest(body=data)
-                http_response = get_users_composer().handle(http_request)
-                return jsonify(http_response.body), http_response.status_code
-
-            http_request = HttpRequest()
+            http_request = HttpRequest(body=data)
             http_response = get_users_composer().handle(http_request)
             return jsonify(http_response.body), http_response.status_code
         except Exception as exception: # pylint: disable=broad-except
@@ -48,22 +47,46 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     @user_routes_bp.route("<user_id>", methods=["GET"])
     def get_user(user_id):
         auth_jwt_verify()
-        return jsonify({"message": "User: Get User {}!".format(user_id)})
+        try:
+            http_request = HttpRequest(params=user_id)
+            http_response = get_user_by_id_composer().handle(http_request)
+            return jsonify(http_response.body), http_response.status_code
+        except Exception as exception: # pylint: disable=broad-except
+            http_response = handle_errors(exception)
+            return jsonify(http_response.body), http_response.status_code
 
     @user_routes_bp.route("<user_id>", methods=["PUT"])
     def update_user(user_id):
         auth_jwt_verify()
-        return jsonify({"message": "User: Update User with ID {}".format(user_id)})
-
-    @user_routes_bp.route("<user_id>", methods=["DELETE"])
-    def delete_user(user_id):
-        auth_jwt_verify()
-        return jsonify({"message": "User: Delete User with ID {}".format(user_id)})
+        try:
+            http_request = HttpRequest(params=user_id, body=request.json)
+            http_response = update_user_composer().handle(http_request)
+            return jsonify(http_response.body), http_response.status_code
+        except Exception as exception: # pylint: disable=broad-except
+            http_response = handle_errors(exception)
+            return jsonify(http_response.body), http_response.status_code
 
     @user_routes_bp.route("<user_id>", methods=["PATCH"])
     def patch_user(user_id):
         auth_jwt_verify()
-        return jsonify({"message": "User: Patch User with ID {}".format(user_id)})
+        try:
+            http_request = HttpRequest(params=user_id, body=request.json)
+            http_response = update_user_attribute_composer().handle(http_request)
+            return jsonify(http_response.body), http_response.status_code
+        except Exception as exception: # pylint: disable=broad-except
+            http_response = handle_errors(exception)
+            return jsonify(http_response.body), http_response.status_code
+
+    @user_routes_bp.route("<user_id>", methods=["DELETE"])
+    def delete_user(user_id):
+        auth_jwt_verify()
+        try:
+            http_request = HttpRequest(params=user_id)
+            http_response = delete_user_by_id_composer().handle(http_request)
+            return jsonify(http_response.body), http_response.status_code
+        except Exception as exception: # pylint: disable=broad-except
+            http_response = handle_errors(exception)
+            return jsonify(http_response.body), http_response.status_code
 
 elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     from flask import Blueprint, jsonify, request

@@ -6,7 +6,6 @@ from .user_repository import UserRepository
 def test_create_user():
     # Assess the function create_user from UserRepository
     model = UserRepository(db_connection_handler.connect_to_db())
-    print(model)
     assert model.create_user("test", "test", "test") == True
     
 @pytest.mark.skip(reason="interacao com o banco")

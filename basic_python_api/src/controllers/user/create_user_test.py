@@ -3,7 +3,7 @@ from .create_user import CreateUser
 class MockUserRepository:
     def __init__(self) -> None:
         self.create_user_attributes = {}
-    
+
     def create_user(self, username, email, password) -> None:
         self.create_user_attributes["username"] = username
         self.create_user_attributes["email"] = email
