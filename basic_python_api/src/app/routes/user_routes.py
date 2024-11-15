@@ -96,7 +96,6 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     user_routes_bp = Blueprint("user_routes", __name__)
 
     @user_routes_bp.route("/", methods=["POST"])
-    @login_required
     def create_user():
         try:
             http_request = HttpRequest(body=request.json)
@@ -161,6 +160,9 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
         except Exception as exception: # pylint: disable=broad-except
             http_response = handle_errors(exception)
             return jsonify(http_response.body), http_response.status_code
+
+elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
+    pass
 
 else:
     raise Exception("Undefined authentication process.") # pylint: disable=W0719

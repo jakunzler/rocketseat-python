@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
-
     from flask import Blueprint, jsonify, request
     from src.views.http_types.http_request import HttpRequest
 
@@ -40,7 +39,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
         except Exception as exception: # pylint: disable=broad-except
             http_response = handle_errors(exception)
             return jsonify(http_response.body), http_response.status_code
-        
+
     @auth_routes_bp.route("/", methods=["PUT"])
     def clear_revoked_tokens():
         try:
@@ -51,7 +50,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
         except Exception as exception: # pylint: disable=broad-except
             http_response = handle_errors(exception)
             return jsonify(http_response.body), http_response.status_code
-    
+
     @auth_routes_bp.route("/", methods=["DELETE"])
     def logout():
         try:
@@ -62,7 +61,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
         except Exception as exception: # pylint: disable=broad-except
             http_response = handle_errors(exception)
             return jsonify(http_response.body), http_response.status_code
-        
+
     # Exemplo de rota protegida dentro do blueprint
     @auth_routes_bp.route("/profile", methods=["GET"])
     def profile():
@@ -72,7 +71,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
 elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     from flask import Blueprint, request, jsonify
     from flask_login import login_user, login_required, logout_user, current_user
-    
+
     from src.configs.connection import db_connection_handler
     from src.models.repositories.user_repository import UserRepository
 
@@ -84,7 +83,7 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
         conn = db_connection_handler
         conn.connect_to_db()
         user = UserRepository(conn).get_user_by_username(data["username"])
-        
+
         if user:
             login_user(user)
             return jsonify({"message": "Login successful!"})
@@ -94,7 +93,7 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     @login_required
     def get_revoked_tokens():
         return jsonify({"message": "Nothing to see here!"})
-    
+
     @auth_routes_bp.route("/", methods=["PUT"])
     @login_required
     def clear_revoked_tokens():
@@ -111,6 +110,9 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     @login_required
     def profile():
         return jsonify({"username": current_user.username, "email": current_user.email})
+
+elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
+    pass
 
 else:
     raise Exception("Undefined authentication process.") # pylint: disable=W0719

@@ -68,3 +68,9 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     app.register_blueprint(auth_routes_bp, url_prefix="/auth")
     app.register_blueprint(user_routes_bp, url_prefix="/user")
     app.register_blueprint(ai_routes_bp, url_prefix="/ai")
+
+elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
+    pass
+
+else:
+    raise Exception("Undefined authentication process.") # pylint: disable=W0719
