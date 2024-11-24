@@ -112,7 +112,71 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
         return jsonify({"username": current_user.username, "email": current_user.email})
 
 elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
-    pass
+    import requests
+    from flask import Blueprint, request, jsonify
+    from firebase_admin import auth
+    from src.app.middlewares.auth_firebase import verify_firebase_token
+    from src.errors.types.http_bad_request import HttpBadRequestError
+    from src.errors.types.http_unauthorized import HttpUnauthorizedError
+
+    auth_routes_bp = Blueprint("firebase", __name__)
+
+    @auth_routes_bp.route("/", methods=["POST"])
+    def firebase_login():
+        """Authenticate with Firebase."""
+        data = request.json
+        email = data.get("email")
+        password = data.get("password")
+
+        if not email or not password:
+            raise HttpBadRequestError("Email and password required")
+
+        # try:
+        #     # Firebase Admin doesn't allow password authentication; use client-side SDK.
+        #     user = auth.get_user_by_email(email)
+        #     return jsonify({"message": "User exists", "uid": user.uid}), 200
+        # except Exception as e:
+        #     raise HttpUnauthorizedError(str(e)) from e
+        url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDEMOUZYa1hql2i8TB_7lL2FMn3fLiJcwU"
+        payload = {
+            "email": email,
+            "password": password,
+            "returnSecureToken": True
+        }
+        response = requests.post(url, json=payload, timeout=(5, 15))
+        if response.status_code == 200:
+            return response.json()  # Retorna os tokens (idToken, refreshToken, etc.)
+
+        raise Exception(f"Authentication failed: {response.json()}") # pylint: disable=W0719
+    
+    @auth_routes_bp.route("/", methods=["GET"])
+    def get_revoked_tokens():
+        user_id = verify_firebase_token()
+        return jsonify({"message": "Access granted", "user_id": user_id}), 200
+    
+    @auth_routes_bp.route("/", methods=["PUT"])
+    def clear_revoked_tokens():
+        user_id = verify_firebase_token()
+        return jsonify({"message": "Access granted", "user_id": user_id}), 200
+    
+    @auth_routes_bp.route("/", methods=["DELETE"])
+    def logout_user():
+        try:
+            user_id = verify_firebase_token()
+            # if user_id != uid:
+            #     raise HttpUnauthorizedError("Invalid user ID")
+            # Revogar todos os tokens de acesso emitidos para o usuário
+            auth.revoke_refresh_tokens(user_id)
+            return jsonify({"message": f"Tokens revoked for user: {user_id}"}), 200
+        except Exception as e:
+            raise HttpUnauthorizedError(str(e)) from e
+
+    @auth_routes_bp.route("/profile", methods=["GET"])
+    def profile():
+        user_id = verify_firebase_token()
+        if isinstance(user_id, dict):  # If it returned a response (error)
+            return user_id
+        return jsonify({"message": "Access granted", "user_id": user_id}), 200
 
 else:
     raise Exception("Undefined authentication process.") # pylint: disable=W0719

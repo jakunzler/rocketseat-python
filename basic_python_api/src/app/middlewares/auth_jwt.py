@@ -16,5 +16,5 @@ def auth_jwt_verify():
 
     if user_id and token_uid and (token_uid == user_id):
         return token_information
-    
+
     raise HttpUnauthorizedError("User Unauthorized")

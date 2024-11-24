@@ -70,7 +70,32 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     app.register_blueprint(ai_routes_bp, url_prefix="/ai")
 
 elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
-    pass
+    import src.configs.firebase.firebase_config # pylint: disable=W0611
+    
+    from flask import Flask, jsonify
+    from flask_cors import CORS
+    
+    from src.app.routes.auth_routes import auth_routes_bp
+    from src.app.routes.user_routes import user_routes_bp
+    # from src.app.routes.ai_routes import ai_routes_bp
+    
+    app = Flask(__name__)
+    app.secret_key = os.environ.get("FLASK_SECRET_KEY")
+    CORS(app)
+
+    # Home route
+    @app.route("/", methods=["GET"])
+    def home():
+        return jsonify({"message": "Home!"})
+
+    # Hello World route
+    @app.route("/hello-world", methods=["GET"])
+    def hello_world():
+        return jsonify({"message": "Hello World!"})
+
+    app.register_blueprint(auth_routes_bp, url_prefix="/auth")
+    app.register_blueprint(user_routes_bp, url_prefix="/user")
+    # app.register_blueprint(ai_routes_bp, url_prefix="/ai")
 
 else:
     raise Exception("Undefined authentication process.") # pylint: disable=W0719
