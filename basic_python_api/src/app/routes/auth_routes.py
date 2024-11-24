@@ -112,6 +112,11 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
         return jsonify({"username": current_user.username, "email": current_user.email})
 
 elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
+    import os
+    from dotenv import load_dotenv
+    
+    load_dotenv()
+    
     import requests
     from flask import Blueprint, request, jsonify
     from firebase_admin import auth
@@ -137,7 +142,7 @@ elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
         #     return jsonify({"message": "User exists", "uid": user.uid}), 200
         # except Exception as e:
         #     raise HttpUnauthorizedError(str(e)) from e
-        url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDEMOUZYa1hql2i8TB_7lL2FMn3fLiJcwU"
+        url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={os.environ.get('FIREBASE_API_KEY')}"
         payload = {
             "email": email,
             "password": password,
