@@ -23,3 +23,14 @@ class AI(Base):
                 deleted_by={self.deleted_by},
                 deleted_at={self.deleted_at},
                 ]""")
+        
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "model": self.model,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+            "deleted_by": self.deleted_by,
+            "deleted_at": self.deleted_at,
+        }
