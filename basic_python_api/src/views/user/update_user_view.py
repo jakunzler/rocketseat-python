@@ -11,7 +11,7 @@ class UpdateUserView(ViewInterface):
         params = http_request.params
         partial_user = http_request.body
         partial_user["id"] = params
-        
+
         response = self.__controller.update_user(partial_user)
 
         return HttpResponse(body={ "data": response }, status_code=200)

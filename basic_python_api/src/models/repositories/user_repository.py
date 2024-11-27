@@ -1,38 +1,49 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from datetime import datetime
 from sqlalchemy import or_, update
 from sqlalchemy.orm.exc import NoResultFound
 from src.models.entities.user import User
 from src.models.interfaces.user_repository import UserRepositoryInterface
+from src.drivers.password_handler import PasswordHandler
 from src.errors.types.http_bad_request import HttpBadRequestError
 
 class UserRepository(UserRepositoryInterface):
     def __init__(self, db_connection) -> None:
         self.__db_connection = db_connection
+        self.__password_handle = PasswordHandler()
 
     def authenticate_user(self, username: str, email: str, password: str) -> bool:
         with self.__db_connection as database:
             try:
-                (
+                user = (
                     database.session.query(User)
                     .filter(
-                        or_(User.username == username, User.email == email),
-                        User.password == password
+                        or_(User.username == username, User.email == email)
                     )
                     .one()
                 )
-                return True
-            except NoResultFound:
-                return False
 
-    def set_first_login_date(self, user_id: int) -> None:
-        with self.__db_connection as database:
-            try:
-                user = database.session.query(User).get(user_id)
-                user.first_login_date = datetime.now()
-                database.session.commit()
-            except Exception as exception:
-                database.session.rollback()
-                raise exception
+                if not self.__password_handle.check_password(password, user.password):
+                    raise HttpBadRequestError("Invalid credentials.")
+
+                if user is None:
+                    return None
+
+                if user.first_login_date is None:
+                    user.first_login_date = datetime.now()
+                    user.last_login_date = datetime.now()
+                    self.update_user(user.to_dict())
+                else:
+                    user.last_login_date = datetime.now()
+                    self.update_user(user.to_dict())
+
+                return user
+            except NoResultFound:
+                return None
 
     def create_user(
         self,
@@ -61,7 +72,7 @@ class UserRepository(UserRepositoryInterface):
                 user_info = (
                     database.session
                     .query(User)
-                    .filter(User.username == username)
+                    .filter(User.username == username, User.deleted_by.is_(None))
                     .one()
                 )
                 return user_info
@@ -74,20 +85,20 @@ class UserRepository(UserRepositoryInterface):
                 user_info = (
                     database.session
                     .query(User)
-                    .filter(User.email == email)
+                    .filter(User.email == email, User.deleted_by.is_(None))
                     .one()
                 )
                 return user_info
             except NoResultFound:
                 return None
 
-    def get_user_by_id(self, user_id: int) -> User:
+    def get_user_by_id(self, user_id: str) -> User:
         with self.__db_connection as database:
             try:
                 user_info = (
                     database.session
                     .query(User)
-                    .filter(User.id == user_id)
+                    .filter(User.id == user_id, User.deleted_by.is_(None))
                     .one()
                 )
                 return user_info
@@ -114,7 +125,10 @@ class UserRepository(UserRepositoryInterface):
 
         with self.__db_connection as database:
             try:
-                query = database.session.query(User)
+                query = (
+                    database.session.query(User)
+                        .filter(User.deleted_by.is_(None))
+                )
 
                 if page_length:
                     if page_length < 1:
@@ -150,17 +164,30 @@ class UserRepository(UserRepositoryInterface):
                 database.session.rollback()
                 raise exception
 
-    def delete_user(self, user_id: int) -> bool:
-        with self.__db_connection as database:
-            try:
-                user_info = (
-                    database.session
-                    .query(User)
-                    .filter(User.id == user_id)
-                    .one()
-                )
-                database.session.delete(user_info)
-                database.session.commit()
-            except Exception as exception:
-                database.session.rollback()
-                raise exception
+    def delete_user(self, current_user_id: str, user_id: str) -> bool:
+        if bool(os.environ.get("LOGICAL_DELETE")) is True:
+            with self.__db_connection as database:
+                try:
+                    database.session.execute(
+                        update(User)
+                        .where(User.id == user_id)
+                        .values(deleted_at=datetime.now(), deleted_by=current_user_id)
+                    )
+                    database.session.commit()
+                except Exception as exception:
+                    database.session.rollback()
+                    raise exception
+        else:
+            with self.__db_connection as database:
+                try:
+                    user_info = (
+                        database.session
+                        .query(User)
+                        .filter(User.id == user_id)
+                        .one()
+                    )
+                    database.session.delete(user_info)
+                    database.session.commit()
+                except Exception as exception:
+                    database.session.rollback()
+                    raise exception

@@ -1,17 +1,30 @@
 import pytest
-from src.drivers.password_handler import PasswordHandler
+import os
+from dotenv import load_dotenv
+
+# load environment variables
+load_dotenv()
+os.environ["FLASK_ENV"] = "test"
+
+from src.errors.types.http_not_found import HttpNotFoundError
+from src.configs.connection import db_connection_handler
 from src.controllers.auth.login_user import LoginUser
+
+db_connection_handler.connect_to_db()
+
+@pytest.fixture(autouse=True)
+def erase_user_table():
+    db_connection_handler.get_clean_tables()
 
 username = "meuUsername"
 email = "meuEmail"
 password = "minhaSenha"
-hashed_password = PasswordHandler().encrypt_password(password)
 
 class User():
     id = 'MinhaStringUUID'
     username = "meuUsername"
     email = "meuEmail"
-    password = hashed_password
+    password = "minhaSenha"
 
 class MockUserRepository:
     def __init__(self, name, mail, passwd) -> None:
@@ -19,14 +32,13 @@ class MockUserRepository:
         self.email = mail
         self.password = passwd
 
-    def get_user_by_username(self, us_name: str) -> User: # pylint: disable=unused-argument
-        return User
-
-    def get_user_by_email(self, us_email: str) -> User: # pylint: disable=unused-argument
-        return User
+    def authenticate_user(self, sent_username: str, sent_email: str, sent_password: str) -> User:
+        if (sent_username == self.username or sent_email == self.email) and sent_password == self.password:
+            return User
+        raise HttpNotFoundError("User not found")
 
 def test_create():
-    user_repository = MockUserRepository(username, email, hashed_password)
+    user_repository = MockUserRepository(username, email, password)
     login_creator = LoginUser(user_repository)
     response = login_creator.login_user(username, email, password)
 

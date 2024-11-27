@@ -76,7 +76,7 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     def delete_user(user_id):
         auth_jwt_verify()
         try:
-            http_request = HttpRequest(params=user_id)
+            http_request = HttpRequest(params=user_id, headers=request.headers)
             http_response = user.delete_user_by_id_composer().handle(http_request)
             return jsonify(http_response.body), http_response.status_code
         except Exception as exception: # pylint: disable=broad-except

@@ -8,9 +8,10 @@ class DeleteUserByIdView(ViewInterface):
         self.__controller = controller
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
+        current_user = http_request.headers.get("uid")
         params = http_request.params
         user_id = params
-        
-        response = self.__controller.delete_user_by_id(user_id)
+
+        response = self.__controller.delete_user_by_id(current_user, user_id)
 
         return HttpResponse(body={ "data": response }, status_code=200)

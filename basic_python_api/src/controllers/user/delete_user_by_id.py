@@ -6,8 +6,8 @@ class DeleteUserById(DeleteUserByIdInterface):
     def __init__(self, user_repository: UserRepositoryInterface) -> None:
         self.__user_repository = user_repository
 
-    def delete_user_by_id(self, user_id: str) -> Dict:
-        user = self.__user_repository.delete_user(user_id)
+    def delete_user_by_id(self, current_user_id: str, user_id: str) -> Dict:
+        user = self.__user_repository.delete_user(current_user_id, user_id)
 
         return self.__format_response(user)
 

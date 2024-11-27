@@ -30,8 +30,8 @@
    - [x] Configurar conexão com o banco de dados
    - [x] Criar modelos de dados com SQLAlchemy
    - [ ] Criar papeis para usuários dentro da aplicação
-   - [ ] Armazenar primeiro e últimos logins
-   - [ ] Criar opção de delete lógico
+   - [x] Armazenar primeiro e últimos logins
+   - [x] Criar opção de delete lógico
 
 5. **Implementar Autenticação e Autorização**
 
