@@ -5,14 +5,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
-    from flask import Flask, jsonify
+    from flask import Flask, jsonify, render_template
+    from flask_socketio import SocketIO, emit
     from flask_cors import CORS
-    
+
     from src.app.routes.auth_routes import auth_routes_bp
     from src.app.routes.user_routes import user_routes_bp
     from src.app.routes.ai_routes import ai_routes_bp
 
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="../../views/templates")
+    socketio = SocketIO(app)
     CORS(app)
 
     # Home route
@@ -24,6 +26,16 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
     @app.route("/hello-world", methods=["GET"])
     def hello_world():
         return jsonify({"message": "Hello World!"})
+    
+    # Chat - SocketIO
+    @app.route("/chat", methods=["GET"])
+    def chat():
+        return render_template("chat.html")
+    
+    @socketio.on('message')
+    def handle_message(msg):
+        emit('message', msg, broadcast=True)
+        print(msg)
 
     app.register_blueprint(auth_routes_bp, url_prefix="/auth")
     app.register_blueprint(user_routes_bp, url_prefix="/user")
@@ -32,7 +44,8 @@ if os.environ.get("AUTH_TYPE") == 'SELF_CODED':
 elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     from flask_login import LoginManager
 
-    from flask import Flask, jsonify
+    from flask import Flask, jsonify, render_template
+    from flask_socketio import SocketIO, emit
     from src.models.repositories.user_repository import UserRepository
     from flask_cors import CORS
     from src.configs.connection import db_connection_handler
@@ -41,7 +54,8 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     from src.app.routes.user_routes import user_routes_bp
     from src.app.routes.ai_routes import ai_routes_bp
 
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="../../views/templates")
+    socketio = SocketIO(app)
     app.secret_key = os.environ.get("FLASK_SECRET_KEY")
     CORS(app)
 
@@ -65,6 +79,15 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
     def hello_world():
         return jsonify({"message": "Hello World!"})
 
+    # Chat - SocketIO
+    @app.route("/chat", methods=["GET"])
+    def chat():
+        return render_template("chat.html")
+    
+    @socketio.on('message')
+    def handle_message(msg):
+        emit('message', msg, broadcast=True)
+
     app.register_blueprint(auth_routes_bp, url_prefix="/auth")
     app.register_blueprint(user_routes_bp, url_prefix="/user")
     app.register_blueprint(ai_routes_bp, url_prefix="/ai")
@@ -72,14 +95,16 @@ elif os.environ.get("AUTH_TYPE") == 'FLASK_LOGIN':
 elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
     import src.configs.firebase.firebase_config # pylint: disable=W0611
     
-    from flask import Flask, jsonify
+    from flask import Flask, jsonify, render_template
+    from flask_socketio import SocketIO, emit
     from flask_cors import CORS
     
     from src.app.routes.auth_routes import auth_routes_bp
     from src.app.routes.user_routes import user_routes_bp
     # from src.app.routes.ai_routes import ai_routes_bp
     
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="../../views/templates")
+    socketio = SocketIO(app)
     app.secret_key = os.environ.get("FLASK_SECRET_KEY")
     CORS(app)
 
@@ -92,6 +117,15 @@ elif os.environ.get("AUTH_TYPE") == 'FIREBASE':
     @app.route("/hello-world", methods=["GET"])
     def hello_world():
         return jsonify({"message": "Hello World!"})
+
+    # Chat - SocketIO
+    @app.route("/chat", methods=["GET"])
+    def chat():
+        return render_template("chat.html")
+    
+    @socketio.on('message')
+    def handle_message(msg):
+        emit('message', msg, broadcast=True)
 
     app.register_blueprint(auth_routes_bp, url_prefix="/auth")
     app.register_blueprint(user_routes_bp, url_prefix="/user")
