@@ -10,16 +10,16 @@ class CreateUser(CreateUserInterface):
 
     def create(self, username: str, email: str, password: str) -> Dict:
         hashed_password = self.__create_hashed_password(password)
-        
+
         self.__create_new_user(username, email, hashed_password)
 
         return self.__format_response(username)
-    
+
     def __create_hashed_password(self, password: str) -> str:
         hashed_password = self.__password_handler.encrypt_password(password)
 
         return hashed_password
-    
+
     def __create_new_user(self, username: str, email: str, hashed_password: str) -> None:
         self.__user_repository.create_user(username, email,  hashed_password)
 
