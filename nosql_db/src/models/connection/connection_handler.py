@@ -1,4 +1,8 @@
-from pymongo import MongoClient, MongoClientError, errors
+"""
+This module is used to connect to the MongoDB database.
+"""
+
+from pymongo import MongoClient, errors
 
 
 class DBConnectionHandler:
@@ -8,11 +12,11 @@ class DBConnectionHandler:
 
     def __init__(
             self,
-            user: str,
-            password: str,
-            host: str,
-            port: int,
-            database: str
+            user: str = 'admin',
+            password: str = 'password',
+            host: str = 'localhost',
+            port: int = 27017,
+            database: str = 'test'
         ) -> None:
         self.__connection_string = f"mongodb://{user}:{password}@{host}:{port}/?authSource=admin"
         self.__database = database
@@ -27,7 +31,7 @@ class DBConnectionHandler:
             self.__client = MongoClient(self.__connection_string)
             self.__db_connection = self.__client[self.__database]
         except errors.ConnectionFailure as e:
-            raise MongoClientError(f'Failed to connect to the MongoDB database: {e}') from e
+            raise errors.ConnectionFailure(f'Failed to connect to the MongoDB database: {e}') from e
 
     def get_db_connection(self):
         """
@@ -40,7 +44,7 @@ class DBConnectionHandler:
         Get the MongoDB collection.
         """
         return self.__db_connection[collection_name]
-    
+
     def close_connection(self):
         """
         Close the MongoDB connection.
