@@ -16,7 +16,7 @@ class DBConnectionHandler:
             password: str = 'password',
             host: str = 'localhost',
             port: int = 27017,
-            database: str = 'test'
+            database: str = 'test_mongodb'
         ) -> None:
         self.__connection_string = f"mongodb://{user}:{password}@{host}:{port}/?authSource=admin"
         self.__database = database

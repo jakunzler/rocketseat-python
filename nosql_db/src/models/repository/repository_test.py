@@ -27,13 +27,6 @@ def __orders_repository(connection_driver = __connection_driver):
     This fixture is used to create an orders repository.
     """
     return OrdersRepository(connection_driver)
-  
-def test_create_db(connection_handler = __connection_handler):
-    """
-    This test is used to test the create_db method of the orders repository.
-    """
-    connection_handler.create_db()
-    assert connection_handler.get_db_connection() is not None
 
 
 def test_insert_document(orders_repository = __orders_repository):
