@@ -6,7 +6,9 @@
     "./intro_python/challenge-solution",
     "./code_design/python-modulo-06-desafio",
     "./basic_python_api",
-    "./nosql_db"
+    "./nosql_db",
+    "./redis",
+    "./rabbitmq"
   ],
   "files.exclude":{
     "**/__pycache__": true,

@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+lint = "pylint --rcfile=.pylintrc src/"
+lint-report = "pylint --rcfile=.pylintrc --report=y src/"
+test = "pytest"
+test-list = "pytest -s -v"
+
+# start rabbitMQ server
+server = "python run.py"
+
+# run publisher
+publisher = "python src/publisher.py"
+
+[packages]
+pika = "*"
+requests = "*"
+python-dotenv = "*"
+
+[dev-packages]
+pytest = "*"
+pylint = "*"
+
+[requires]
+python_version = "3.11"
+python_full_version = "3.11.9"
